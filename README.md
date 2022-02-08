@@ -5,7 +5,7 @@ Instructions to Run the Docker Application
 1. Extract the folder
 2. Navigate to the folder 
 
-     # cd <foldername> 
+     ## cd <foldername> 
 
 3. Install the dependencies for the back-end:
 
