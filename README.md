@@ -39,6 +39,6 @@ This project uses the following technologies:
 - [Redux](https://redux.js.org/basics/usagewithreact) for state management between React components
      
 Test Credentials:
-email : shan@gmail.com
-password : shan123
-username : shan
+- email : shan@gmail.com
+- password : shan123
+- username : shan
