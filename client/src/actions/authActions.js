@@ -11,7 +11,7 @@ import {
 export const registerUser = (userData, history) => dispatch => {
   axios
     .post("http://localhost:5000/users/register", userData)
-    .then(res => history.push("/login")) // re-direct to login on successful register
+    .then(res => history.push("/login")) 
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -20,13 +20,36 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
-// get user token log
+//update user
+export const updateUser = (userData, history) => dispatch => {
+  axios
+    .post("http://localhost:5000/users/update", userData)
+    .then(res => history.push("/dashboard")) 
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+export const updatePassword = (userData, history) => dispatch => {
+  axios
+    .post("http://localhost:5000/users/psswrd", userData)
+    .then(res => history.push("/dashboard")) 
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 export const loginUser = userData => dispatch => {
   axios
     .post("http://localhost:5000/users/login", userData)
     .then(res => {
-      // Save to local
-    // Set token to local
+      
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header

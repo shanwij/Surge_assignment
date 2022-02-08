@@ -11,12 +11,13 @@ const loginInputValidate = require("../validation/loginVal");
 const User = require("../models/User");
 const keys = require("../auth_config/keys");
 
-// @route POST api/users/register
+// @route POST /users/register
 // @desc Register user
 // @access Public
 
 router.post("/register", (req, res) => {
     
+    const { email, uname} = req.body;
     //Form validation
     const {errors, isValid} = registerInputValidate(req.body);
     
@@ -24,11 +25,20 @@ router.post("/register", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    User.findOne({email:req.body.email}).then(user=>{
-
-        if(user){
-            return res.status(400).json({email:"Email already exists"});
-        } else{
+    User.findOne(
+    {$or:[
+        {email:email},
+        {uame: uname}
+      ]}
+      )
+      .then(async (savedUser) => {
+        if (savedUser) {
+          return res
+            .status(422)
+            .json({ error: "User Already Exist with this email or username" });
+        }
+    
+        else{
             const newUser = new User({
                 name:req.body.name,
                 uname:req.body.uname,
@@ -51,7 +61,7 @@ router.post("/register", (req, res) => {
         }
 
     });
-
+    
 });
 
 // @route POST api/users/login
@@ -107,6 +117,46 @@ router.post("/login",(req,res) => {
             .json({ passwordincorrect: "Password incorrect" });
         }
       });
+    });
+});
+
+router.post("/update",(req,res) => {
+
+    const { name } = req.body;
+    if (!name) {
+      return res.status(422).json({ error: "Please fill all the fields" });
+    }
+    User.findById(req.user._id, req.body)
+      .then(async(result) => {
+        res.status(200).json({ name:req.body.fullname });
+      })
+      .catch((error) => {
+        res.status(422).json({ error });
+      });
+});
+
+router.post("/psswrd",(req,res) => {
+    const {password } = req.body;
+
+    if (!password) {
+      return res.status(422).json({ error: "Please fill all the fields" });
+    }
+    bcrypt.hash(password, 12).then(async (hashedPassword) => {
+      const user = new User({      
+        password: hashedPassword,
+      });
+  
+    await User.findByIdAndUpdate(req.user.id,
+      {
+        password: hashedPassword,
+      })
+      .then((result) => {
+        res.status(200).json({ result });
+      })
+      .catch((error) => {
+        res.status(422).json({ error });
+      });
+  
     });
 });
 

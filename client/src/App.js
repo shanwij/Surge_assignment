@@ -11,6 +11,8 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Update from "./components/auth/Update";
+import Password from "./components/auth/Password";
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -44,6 +46,8 @@ function App() {
           <Route path="/" component = {Landing} exact />
           <Route path="/register" component = {Register} exact/>
           <Route path="/login" component={Login} exact/>
+          <Route path="/update" component={Update} exact/>
+          <Route path="/psswrd" component={Password} exact/>
           <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </Switch>
